@@ -6,6 +6,14 @@ bundle:
 
 include:
   - resources/*.yml
+  - clusters/*.yml # we should include this because we created clusters folder we should include it to our bundle
+  # so our bundle can recognize it
+
+
+variables:
+  dab_notebook:
+    description: This is my dab notebook
+    default: ../notebooks/hello.ipynb
 
 targets:
   dev:
@@ -14,6 +22,8 @@ targets:
     # - Any job schedules and triggers are paused by default.
     # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
     mode: development
+    # while we deploy if we did not specify the target environment it will automatically go to dev.
+    # because below default = True for DEV
     default: true
     workspace:
       host: https://adb-2821391883869828.8.azuredatabricks.net
@@ -23,7 +33,12 @@ targets:
     workspace:
       host: https://adb-2821391883869828.8.azuredatabricks.net
       # We explicitly deploy to /Workspace/Users/nguliyev@kinetechconsult.com to make sure we only have a single copy.
-      root_path: /Workspace/Users/nguliyev@kinetechconsult.com/.bundle/${bundle.name}/${bundle.target}
+      # root_path: /Workspace/Users/nguliyev@kinetechconsult.com/.bundle/${bundle.name}/${bundle.target}
+      root_path: /${workspace.current_user.short_name}
+
     permissions:
       - user_name: nguliyev@kinetechconsult.com
         level: CAN_MANAGE
+    # setting variables only for Production environment. For QA we can set different path
+    variables:
+      dab_notebook: ../notebooks/hello_prod.ipynb
