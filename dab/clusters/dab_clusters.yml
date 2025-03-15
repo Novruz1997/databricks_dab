@@ -12,6 +12,7 @@ variables:
         max_workers: 1
       spark_conf:
         spark.speculation: true
+
   dab_cluster_task_2:
     description: "MY DAB Cluster for task 2"
     type: complex # type should be complex. it is only available option for now in DBX.
@@ -24,6 +25,7 @@ variables:
         max_workers: 1
       spark_conf:
         spark.speculation: true
+
   #this will be our interactive cluster which alread exists in our workspace
   existing_cluster:
     description: "My existing cluster"
@@ -32,3 +34,21 @@ variables:
     # but this kind of variable is called "RETREIVAL" but we can retreive many other things like policies, notifications and etc...
     lookup:
       cluster: "shared_cluster" # the existing name of our cluster.
+
+  dab_cluster_task_4:
+    description: "MY DAB Cluster for task 4"
+    type: complex # type should be complex. it is only available option for now in DBX.
+    default:
+      spark_version: 15.4.x-scala2.12
+      node_type_id: Standard_D3_v2
+      data_security_mode: SINGLE_USER
+      autoscale:
+        min_workers: 1
+        max_workers: 1
+      # below we will define variables under for both spark_conf and spark_env_vars
+      # then we will show how we will read them. look hello4.py to see how we read these variables
+      spark_conf:
+        spark.speculation: true
+        partitionDate: ${var.partition_date}
+      spark_env_vars:
+        partitionDate: ${var.partition_date}
