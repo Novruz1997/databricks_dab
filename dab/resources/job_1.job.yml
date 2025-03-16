@@ -1,0 +1,43 @@
+# The main job for dab.
+resources:
+  jobs:
+    job_1:
+      name: job_1
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+      email_notifications:
+        on_failure:
+          - nguliyev@kinetechconsult.com
+      tasks:
+        - task_key: job_1_t1
+          job_cluster_key: job_cluster
+          notebook_task:
+            notebook_path: ${var.dab_notebook}
+            base_parameters:
+              t1_param: "param t1"
+
+        # from this task we will trigger our other job which is job_1.job.yml
+        - task_key: job2_trigger
+          # we don't need a cluster here because this is dummy task to tigger to job2
+          # job_cluster_key: job_cluster_2
+          depends_on:
+            - task_key: job_1_t1  
+          # also we don't need any notebook_task
+          # notebook_task:
+          #   notebook_path: ${var.dab_notebook}
+          #   base_parameters:
+          #     from_t1: "{{tasks.notebook_task.values.from_t1}}" 
+          # we need to add run_job_task
+          run_job_task:
+            # we need job id of other job. we get it with below syntax
+            job_id: ${resources.jobs.job_2.id}  # this is the syntax to run other job
+            # we also want to pass parameters from job1 to job2. we do below
+            job_parameters:
+              param_from_job_1: "{{tasks.job_1_t1.values.from_t1}}" # {{tasks.<job_task_key>.values.<key>}}
+
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster: ${var.dab_cluster_task_1}

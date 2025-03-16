@@ -1,0 +1,20 @@
+# The main job for dab.
+resources:
+  jobs:
+    job_2:
+      name: job_2
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+      email_notifications:
+        on_failure:
+          - nguliyev@kinetechconsult.com
+      tasks:
+        - task_key: job2_2_t2
+          job_cluster_key: job_cluster
+          notebook_task:
+            notebook_path: ../notebooks/hello2.ipynb
+      job_clusters:
+      - job_cluster_key: job_cluster
+        new_cluster: ${var.dab_cluster_task_1}

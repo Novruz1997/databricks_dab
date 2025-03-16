@@ -6,13 +6,20 @@ bundle:
 
 include:
   - resources/*.yml
+  - clusters/*.yml # we should include this because we created clusters folder we should include it to our bundle
+  # so our bundle can recognize it
+
+
+variables:
+  dab_notebook:
+    description: This is my dab notebook
+    default: ../notebooks/hello.ipynb
+  partition_date:
+    description: Date as of date
+    default: "2025-01-22"
 
 targets:
   dev:
-    # The default target uses 'mode: development' to create a development copy.
-    # - Deployed resources get prefixed with '[dev my_user_name]'
-    # - Any job schedules and triggers are paused by default.
-    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
     mode: development
     default: true
     workspace:
@@ -22,8 +29,8 @@ targets:
     mode: production
     workspace:
       host: https://adb-2821391883869828.8.azuredatabricks.net
-      # We explicitly deploy to /Workspace/Users/nguliyev@kinetechconsult.com to make sure we only have a single copy.
-      root_path: /Workspace/Users/nguliyev@kinetechconsult.com/.bundle/${bundle.name}/${bundle.target}
+      root_path: /${workspace.current_user.short_name}
+
     permissions:
       - user_name: nguliyev@kinetechconsult.com
         level: CAN_MANAGE
