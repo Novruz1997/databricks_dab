@@ -2,7 +2,7 @@
 resources:
   jobs:
     job_1:
-      name: job_1
+      name: "dab_job"
       trigger:
         periodic:
           interval: 1
