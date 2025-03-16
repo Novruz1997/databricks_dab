@@ -21,7 +21,7 @@ jobs:
 
     steps:
       # Check out this repo, so that this workflow can access it
-      - uses: action/checkout@v3
+      - uses: actions/checkout@v3
 
       # Download the databricks CLI.
       - uses: databricks/setup-cli@main
