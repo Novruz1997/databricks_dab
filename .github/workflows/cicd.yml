@@ -8,7 +8,11 @@ concurrency: "1"
 
 # Trigger the worflow whenever a pull request is opened against the repo's main branch
 # or an existing pull request's head branch is updated
-on: [push]
+# on: [push]
+
+on: 
+  pull_request:
+    branches: [main]
 
 jobs:
   # used by the "pipeline_update" job to deploy the bundle
@@ -21,7 +25,7 @@ jobs:
 
     steps:
       # Check out this repo, so that this workflow can access it
-      - uses: action/checkout@v3
+      - uses: actions/checkout@v3
 
       # Download the databricks CLI.
       - uses: databricks/setup-cli@main
@@ -55,7 +59,7 @@ jobs:
       # run the databricks workflow named "dab_job" as defined in the 
       # bundle that just was deployed
       - run: databricks bundle run dab_job --refresh-all
-        working_directory: dab
+        working-directory: dab
         env:
           DATABRICKS_TOKEN: ${{ secrets.SP_TOKEN }}
           DATABRICKS_BUNDLE_ENV: dev
