@@ -15,6 +15,14 @@ resources:
           job_cluster_key: job_cluster
           notebook_task:
             notebook_path: ../notebooks/hello2.ipynb
+
+        # you can assign existing interactive cluster to the task as well. as below.
+        # - task_key: existing_cluster_use_task
+        #   existing_cluster_id: ${var.existing_cluster}
+        #   notebook_task:
+        #     notebook_path: ../notebooks/hello2.ipynb
+            
       job_clusters:
       - job_cluster_key: job_cluster
         new_cluster: ${var.dab_cluster_task_1}
+        
